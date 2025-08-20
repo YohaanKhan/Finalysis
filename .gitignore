@@ -1,0 +1,22 @@
+# Virtual environments
+env/
+.env
+
+
+# Python artifacts
+__pycache__/
+*.py[cod]
+*.pyc
+
+
+# Data and models (large or regenerable files)
+notebooks/
+models/
+data/
+dags/
+src/
+
+
+# Optional: Ignore IDE-specific files if present
+*.vscode/
+*.idea/

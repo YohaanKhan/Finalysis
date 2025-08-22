@@ -5,6 +5,7 @@ import os
 import random
 from dotenv import load_dotenv
 from pandas_datareader import data as pdr
+from sentiment import get_final_sentiment
 
 # We faced errors, and it turns out that XGBoost requires specific columns to be present in the dataset IN ORDER to make predictions.
 # This is the expected structure of the dataset. so we defined it here to ensure that the ingestion pipeline produces the correct columns.
@@ -106,7 +107,7 @@ def ingest_yfinance_data(ticker: str) -> None:
                  cash_flow.get('Purchase Of PPE', cash_flow.get('Capital Expenditure', 0))) / shares_outstanding
             ) if shares_outstanding != 0 else 0.0,
 
-            "Sentiment_Score": random.uniform(-1, 1)
+            "Sentiment_Score": get_final_sentiment(ticker)
         }
 
         # Save
@@ -210,5 +211,5 @@ def run_pipeline(ticker: str):
 
 
 # Example
-df = run_pipeline("AAPL")
-print(df.head())
+# df = run_pipeline("IBM")
+# print(df.head())

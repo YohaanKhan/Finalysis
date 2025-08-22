@@ -152,7 +152,25 @@ def analyze_sentiment(headlines):
     
     return scores, average
 
+def get_final_sentiment(ticker):
+    # Fetch headlines for the ticker
+    hs = get_headlines(ticker)
+    # Analyze sentiment scores
+    scores, avg = analyze_sentiment(hs)
 
+    # Prepare results as a dictionary
+    results = {
+        "company": ticker,
+        "headlines": [{"headline": h, "sentiment": s} for h, s in zip(hs, scores)],
+        "average_sentiment": avg
+    }
+
+    # Save results to JSON file
+    filename = f"data/{ticker}_sentiment_data.json"
+    with open(filename, "w", encoding="utf-8") as f:
+        json.dump(results, f, ensure_ascii=False, indent=4)
+
+    return avg
 
 # Testing Script
 if __name__ == "__main__":

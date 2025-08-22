@@ -1,0 +1,212 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Dashboard — {{ ticker }}</title>
+<style>
+  :root{
+    --bg:#0f1724; --card:#071018; --muted:#9fb8c8; --accent:#9fffd1;
+  }
+  html,body{height:100%}
+  body { font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+         background:var(--bg); color:#e6eef6; margin:0; padding:18px; -webkit-font-smoothing:antialiased;}
+  .container { max-width:1100px; margin:0 auto; }
+  .header { display:flex; justify-content:space-between; align-items:flex-start; gap:12px; margin-bottom:6px; }
+  .lefthead { min-width:0; }
+  .title { font-size:24px; font-weight:700; margin:0; }
+  .subtitle { color:var(--muted); font-size:13px; margin-top:6px; }
+  .score { font-size:18px; padding:8px 12px; border-radius:8px; background:#071022; color:var(--accent); border:1px solid rgba(20,80,70,0.35); }
+
+  .top-row { display:flex; gap:20px; align-items:flex-start; margin-top:6px; }
+  .left { flex:1; }
+  .right { width:420px; } /* increased width so sentiment column looks roomy */
+
+  .card { background:var(--card); padding:14px; border-radius:10px; border:1px solid #122433; }
+
+  .section-title { font-weight:700; margin-bottom:10px; color:#d8eef9; font-size:15px; }
+  .stack-bar { height:48px; border-radius:8px; overflow:hidden; display:flex; cursor:default; box-shadow: inset 0 -2px 6px rgba(0,0,0,0.45); }
+  .segment { height:100%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:12px;
+             color:rgba(0,0,0,0.85); position:relative; transition:transform .12s ease, filter .12s ease; }
+  .segment:hover { transform: translateY(-4px); filter:brightness(1.06); z-index:2; }
+
+  #tooltip { position:fixed; pointer-events:none; background:#001018; color:#bfe8d6; padding:7px 10px; border-radius:6px;
+            border:1px solid #163b2e; font-size:13px; display:none; z-index:9999; white-space:nowrap; box-shadow:0 6px 18px rgba(0,0,0,0.5); }
+
+  .features-list { display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; }
+  .feature-chip { background:#061018; padding:6px 8px; border-radius:6px; border:1px solid #122b35; font-size:13px; color:#aee6d0; }
+
+  .headline { padding:10px; border-radius:8px; margin-bottom:8px; background:#00131a; border:1px solid #0b2b2b; display:flex; justify-content:space-between; gap:12px; align-items:center; }
+  .sentiment-positive { color:#0b6623; font-weight:700; }
+  .sentiment-negative { color:#a33; font-weight:700; }
+
+  .metrics-grid { display:grid; grid-template-columns:repeat(3, 1fr); gap:10px; margin-top:10px; }
+  .metric-box { background:#071018; padding:10px; border-radius:8px; border:3px solid rgba(255,255,255,0.06); min-height:66px; display:flex; flex-direction:column; justify-content:center; }
+  .metric-name { font-size:13px; color:#bfe8ff; margin-bottom:6px; }
+  .metric-value { font-weight:700; font-size:15px; }
+
+  .border-good { border-color: #0bd67a; }
+  .border-bad { border-color: #ff5959; }
+  .border-medium, .border-unknown { border-color: #ffffff; opacity:0.9; }
+
+  .back { display:inline-block; margin-top:12px; color:#9ad1c6; text-decoration:none; padding:8px 10px; background:#0b2530; border-radius:8px; border:1px solid #123; }
+
+  @media (max-width:980px){
+    .top-row{flex-direction:column}
+    .right{width:100%}
+    .metrics-grid{grid-template-columns:repeat(2,1fr)}
+  }
+</style>
+</head>
+<body>
+<div id="tooltip"></div>
+<div class="container">
+  <div class="header">
+    <div class="lefthead">
+      <h1 class="title">{{ ticker }} — Explainable Credit Score</h1>
+      <div class="subtitle">Model: {{ model_file }}</div>
+    </div>
+    <div class="score">Credit Score: <strong style="font-size:20px;">{{ rating }}</strong></div>
+  </div>
+
+  <div class="top-row">
+    <div class="left">
+      <div class="card">
+        <div class="section-title">Model feature contribution</div>
+        <div class="stack-bar" id="stackBar" role="img" aria-label="Feature contribution bar">
+          {% for f in features %}
+            <div class="segment" style="width: {{ f.display_percent }}%;" data-name="{{ f.name }}" data-percent="{{ f.display_percent }}" data-index="{{ loop.index0 }}"></div>
+          {% endfor %}
+        </div>
+
+        <div class="features-list" id="featuresList">
+          {% for f in features[:18] %}
+            <div class="feature-chip">{{ f.name }} — {{ "%.2f"|format(f.display_percent) }}%</div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:12px;">
+        <div class="section-title">Key financial & FRED metrics</div>
+        <div class="metrics-grid">
+          {% for m in metrics %}
+            {% set cls = 'border-unknown' %}
+            {% if m.status == 'good' %}{% set cls = 'border-good' %}{% elif m.status == 'bad' %}{% set cls = 'border-bad' %}{% else %}{% set cls = 'border-medium' %}{% endif %}
+            <div class="metric-box {{ cls }}">
+              <div class="metric-name">{{ m.display }}</div>
+              <div class="metric-value">
+                {% if m.value is none %}
+                  N/A
+                {% elif m.value is number %}
+                  {{ "%.3f"|format(m.value) }}
+                {% else %}
+                  {{ m.value }}
+                {% endif %}
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    <div class="right">
+      <div class="card">
+        <div class="section-title">Recent headlines (sentiment)</div>
+        {% if avg_sentiment is not none %}
+          <div style="margin-bottom:8px; color:var(--muted)">Average sentiment: <strong>{{ "%.3f"|format(avg_sentiment) }}</strong></div>
+        {% endif %}
+
+        {% if headlines %}
+          {% for h in headlines %}
+            <div class="headline">
+              <div style="flex:1; padding-right:8px;">{{ h.headline }}</div>
+              <div style="width:80px; text-align:right;">
+                {% set s = h.sentiment %}
+                {% if s is not none %}
+                  {% if s > 0 %}
+                    <span class="sentiment-positive">{{ "%.3f"|format(s) }}</span>
+                  {% elif s < 0 %}
+                    <span class="sentiment-negative">{{ "%.3f"|format(s) }}</span>
+                  {% else %}
+                    <span style="color:#d6d6d6;">0.000</span>
+                  {% endif %}
+                {% else %}
+                  <span style="color:#cbd5df;">N/A</span>
+                {% endif %}
+              </div>
+            </div>
+          {% endfor %}
+        {% else %}
+          <div style="color:var(--muted);">No headlines available</div>
+        {% endif %}
+
+        <a class="back" href="{{ url_for('index') }}">← Back</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const tooltip = document.getElementById('tooltip');
+  function clamp(v, a, b){ return Math.max(a, Math.min(b, v)); }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const segments = Array.from(document.querySelectorAll('.segment'));
+    if(segments.length === 0) return;
+
+    // diverse palette of high-contrast colors
+    const palette = [
+      '#ff6b6b', '#4dabf7', '#f7c948', '#6bdc85', '#9b5cff',
+      '#ff9f43', '#2ec4b6', '#ff6f91', '#845ec2', '#00a8cc',
+      '#ffd166', '#06d6a0', '#ef476f', '#118ab2', '#ffb74d',
+      '#8dd3c7', '#fb8072', '#80b1d3', '#b3de69', '#fdb462'
+    ];
+
+    // Fisher-Yates shuffle
+    for (let i = palette.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [palette[i], palette[j]] = [palette[j], palette[i]];
+    }
+
+    // assign colors (cycled) to segments so adjacent slices are likely different
+    segments.forEach((seg, idx) => {
+      const pct = parseFloat(seg.dataset.percent) || 0;
+      const color = palette[idx % palette.length];
+      seg.style.background = color;
+      seg.setAttribute('aria-label', `${seg.dataset.name}: ${pct.toFixed(3)}%`);
+    });
+
+    // tooltip handlers with viewport clamping
+    segments.forEach(seg => {
+      seg.addEventListener('mousemove', (e) => {
+        const name = seg.dataset.name || '';
+        const pct = parseFloat(seg.dataset.percent) || 0;
+        const text = `<strong style="color:#bfe8c7">${name}</strong> — ${pct.toFixed(3)}%`;
+        tooltip.innerHTML = text;
+        tooltip.style.display = 'block';
+
+        const padding = 12;
+        let left = e.clientX + padding;
+        let top = e.clientY + padding + window.scrollY;
+
+        const vw = window.innerWidth;
+        const vh = window.innerHeight;
+        const rect = tooltip.getBoundingClientRect();
+        const tW = rect.width || 240;
+        const tH = rect.height || 40;
+
+        if (left + tW + 8 > window.scrollX + vw) left = e.clientX - tW - padding;
+        if (top - window.scrollY + tH + 8 > vh) top = e.clientY + window.scrollY - tH - padding;
+
+        tooltip.style.left = left + 'px';
+        tooltip.style.top = top + 'px';
+      });
+
+      seg.addEventListener('mouseleave', () => {
+        tooltip.style.display = 'none';
+      });
+    });
+  });
+</script>
+</body>
+</html>

@@ -34,6 +34,10 @@
             "sentiment": -0.33296823501586914
         },
         {
+            "headline": "Target Announces New CEO, Why Analysts Are Bullish About The Change",
+            "sentiment": -0.28738756613297894
+        },
+        {
             "headline": "Target Outgoing CEO Warns Of Short-Term Tariff Pressure, Stock Sinks",
             "sentiment": -0.40068727102279666
         },
@@ -50,6 +54,10 @@
             "sentiment": -0.35536790546359437
         },
         {
+            "headline": "Target Corp. (TGT) Drops Below $100 on Weak Outlook, CEO Change",
+            "sentiment": -0.605005223083496
+        },
+        {
             "headline": "Security updates for Monday",
             "sentiment": 0.28108710924784347
         },
@@ -60,6 +68,10 @@
         {
             "headline": "Ollie’s Bargain Outlet Holdings, Inc. (OLLI): A Bull Case Theory",
             "sentiment": -0.25968434816996255
+        },
+        {
+            "headline": "The Quiet Part Out Loud: Target Ditching DEI Cost The CEO His Job And Investors $12 Billion",
+            "sentiment": -0.3164722363154093
         },
         {
             "headline": "Researchers Detail Windows EPM Poisoning Exploit Chain Leading to Domain Privilege Escalation",
@@ -74,16 +86,20 @@
             "sentiment": -0.43005400768915814
         },
         {
+            "headline": "Walmart is still embarrassing Target: Opening Bid top takeaway",
+            "sentiment": -0.23397502892812094
+        },
+        {
             "headline": "Amazon's Latest Prime Grocery Move Is a Big 'Shot' at the Competition",
             "sentiment": 0.3979180653889974
         },
         {
-            "headline": "Target Reports Earnings Next Week. Investors Are Wary—or Worse—About Its Stock.",
-            "sentiment": -0.33294516801834106
-        },
-        {
             "headline": "Shrugging Off Tariffs, Car Buyers Drive July Retail Sales",
             "sentiment": -0.20321698983510336
+        },
+        {
+            "headline": "Target Reports Earnings Next Week. Investors Are Wary—or Worse—About Its Stock.",
+            "sentiment": -0.33294516801834106
         },
         {
             "headline": "TGT stock price: Why are Target shares dropping today—and who is Michael Fiddelke?",
@@ -94,33 +110,17 @@
             "sentiment": 0.5274644266446432
         },
         {
+            "headline": "This stock is the bellwether for all of retail, and here’s what it just revealed",
+            "sentiment": 0.3293983538945516
+        },
+        {
             "headline": "Target falling behind peers, BofA cuts to Sell",
             "sentiment": -0.6060922929445902
         },
         {
             "headline": "Stock market today: Nasdaq leads market decline as tech stocks get hammered for second day",
             "sentiment": -0.33148193359375
-        },
-        {
-            "headline": "Stock market today: Dow, S&P 500, Nasdaq futures stall with Trump-Zelenskiy talks, Fed policy in focus",
-            "sentiment": -0.38720096740722654
-        },
-        {
-            "headline": "Target Appoints New CEO. Here's What Investors Hope He Will Address.",
-            "sentiment": 0.45961447771823766
-        },
-        {
-            "headline": "Choreo LLC Sells 1,054 Shares of Target Corporation (NYSE:TGT)",
-            "sentiment": -0.2307884308497111
-        },
-        {
-            "headline": "Target Corporation (NYSE:TGT) Given Average Rating of “Hold” by Analysts",
-            "sentiment": -0.37537396748860674
-        },
-        {
-            "headline": "As Target Names New CEO, Stock Tumbles 10% As DEI Hit And Tariffs Drag On Sales",
-            "sentiment": -0.4026181834914468
         }
     ],
-    "average_sentiment": -0.10993340386149857
+    "average_sentiment": -0.11583589149638858
 }

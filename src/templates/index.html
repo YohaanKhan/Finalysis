@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>FINALYSIS</title>
+  <style>
+    :root{
+      --bg:#071022;
+      --card:#071018;
+      --muted:#9fb8c8;
+      --accent:#00ff9d;
+      --glass: rgba(255,255,255,0.03);
+    }
+    html,body{height:100%; margin:0; font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; -webkit-font-smoothing:antialiased;}
+    body{
+      background: linear-gradient(180deg,#06101a 0%, var(--bg) 60%);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:28px;
+      color:#e6f4f8;
+    }
+    .card{
+      width:100%;
+      max-width:920px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), var(--card));
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,0.04);
+      padding:28px;
+      box-shadow: 0 10px 30px rgba(2,6,12,0.6);
+    }
+    .brand {
+      display:flex;
+      gap:16px;
+      align-items:center;
+      margin-bottom:6px;
+    }
+    .logo {
+      width:56px;
+      height:56px;
+      border-radius:10px;
+      background:linear-gradient(135deg,#00ff9d 0%, #00c7ff 100%);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:#012;
+      font-weight:800;
+      font-size:18px;
+      letter-spacing:0.06em;
+    }
+    h1 { margin:0; font-size:28px; letter-spacing:0.02em; }
+    .subtitle { color:var(--muted); margin-top:6px; font-size:13px; }
+
+    .form-row{ display:flex; gap:12px; margin-top:18px; align-items:center; }
+    label{ display:block; color:#9ad0ff; font-size:13px; margin-bottom:8px; }
+    input[type="text"]{
+      flex:1;
+      padding:14px 12px;
+      border-radius:10px;
+      border:1px solid rgba(170,200,220,0.06);
+      background:rgba(3,10,14,0.5);
+      color:#e6f4f8;
+      font-size:15px;
+      outline:none;
+      transition: box-shadow .12s ease, transform .08s ease;
+    }
+    input[type="text"]:focus{ box-shadow:0 6px 24px rgba(3,120,100,0.06); transform:translateY(-1px); border-color: rgba(0,200,150,0.14); }
+
+    button.primary{
+      background:linear-gradient(180deg,#00f0a5 0%, #00c77f 100%);
+      border:none;
+      color:#012;
+      font-weight:800;
+      padding:12px 16px;
+      border-radius:10px;
+      cursor:pointer;
+      font-size:14px;
+      box-shadow: 0 6px 18px rgba(0,200,140,0.08);
+    }
+    .note{ color:var(--muted); font-size:13px; margin-left:6px; }
+
+    .flash { margin-top:12px; color:#ffb4b4; font-size:14px; }
+
+    .meta{ margin-top:18px; color:#9fb8c8; font-size:13px; display:flex; gap:12px; align-items:center; justify-content:space-between; }
+    .small { font-size:12px; color:#9fb8c8; }
+    .examples { display:flex; gap:8px; align-items:center; }
+    .chip{ background:var(--glass); padding:6px 8px; border-radius:8px; font-size:13px; color:#bfe8ff; border:1px solid rgba(255,255,255,0.02); }
+
+    @media (max-width:640px){
+      .form-row{ flex-direction:column; align-items:stretch; }
+      .subtitle{ font-size:13px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="card" role="main" aria-label="Finalysis homepage">
+    <div class="brand">
+      <div>
+        <h1>FINALYSIS</h1>
+        <div class="subtitle">Real-time explainable credit intelligence — enter a ticker to run the pipeline and view a transparent credit score.</div>
+      </div>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="flash">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <form method="post" action="{{ url_for('score') }}" style="margin-top:12px;">
+      <label for="ticker">Ticker symbol</label>
+      <div class="form-row">
+        <input id="ticker" name="ticker" type="text" placeholder="e.g. IBM, AAPL, MSFT" value="IBM" required />
+        <button type="submit" class="primary">Run Analysis</button>
+      </div>
+      <div style="margin-top:10px; display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
+        <div class="note">This runs the ingestion pipeline and scores the latest structured data with the trained XGBoost model.</div>
+        <div class="examples" aria-hidden="true">
+          <div class="chip">IBM</div>
+          <div class="chip">AAPL</div>
+          <div class="chip">TGT</div>
+        </div>
+      </div>
+    </form>
+
+    <div class="meta">
+      <div class="small"></div>
+      <div class="small">Model: <strong>credit_rating_xgboost_final.json</strong></div>
+    </div>
+  </div>
+</body>
+</html>

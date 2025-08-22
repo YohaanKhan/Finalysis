@@ -1,6 +1,6 @@
 # Finalysis — Real-Time Explainable Credit Intelligence
 
-A small Flask app that runs a pipeline to ingest multi-source financial & sentiment data, predicts an issuer credit score using a trained XGBoost model, and displays an explainable dashboard (stacked contribution bar, sentiment headlines, and key financial / FRED metrics).
+A small Flask app that runs a pipeline to ingest multi-source financial & sentiment data, predicts an issuer credit score using a trained XGBoost model, and displays an explainable dashboard (stacked contribution bar, sentiment headlines using NewsAPI, and key financial / FRED metrics).
 
 Final UI screenshots:
 
@@ -106,7 +106,7 @@ Finalysis/
 
 ## Configuration / Environment
 
-You will need FRED and NEWSAPI keys. Generate and load the keys in a .env file.
+You will need FRED API and NewsAPI keys. Generate and load the keys in a .env file.
 
 ---
 
@@ -134,6 +134,14 @@ You will need FRED and NEWSAPI keys. Generate and load the keys in a .env file.
 
 * **XGBoost model load errors**
   Confirm `models/credit_rating_xgboost_final.json` exists and is a valid XGBoost model file. If missing, the app attempts to use the baseline file.
+
+---
+
+## Contributing
+
+* Fork the repository, create a feature branch, implement changes, and open a PR.
+* Keep UI changes in `src/templates/`, backend logic in `src/`.
+* Ensure any heavy imports/loaders are guarded so the Flask server can start quickly.
 
 ---
 

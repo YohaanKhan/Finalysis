@@ -5,7 +5,7 @@ import os
 import random
 from dotenv import load_dotenv
 from pandas_datareader import data as pdr
-from sentiment import get_final_sentiment
+from src.sentiment import get_final_sentiment
 
 # We faced errors, and it turns out that XGBoost requires specific columns to be present in the dataset IN ORDER to make predictions.
 # This is the expected structure of the dataset. so we defined it here to ensure that the ingestion pipeline produces the correct columns.

@@ -12,10 +12,8 @@ __pycache__/
 
 # Data and models (large or regenerable files)
 notebooks/
-models/
 data/
 dags/
-src/
 
 
 # Optional: Ignore IDE-specific files if present

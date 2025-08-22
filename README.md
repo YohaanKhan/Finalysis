@@ -2,8 +2,11 @@
 
 A small Flask app that runs a pipeline to ingest multi-source financial & sentiment data, predicts an issuer credit score using a trained XGBoost model, and displays an explainable dashboard (stacked contribution bar, sentiment headlines, and key financial / FRED metrics).
 
-GitHub: [https://github.com/YohaanKhan/Finalysis.git](https://github.com/YohaanKhan/Finalysis.git)
+Final UI screenshots:
 
+![alt text](image.png)
+
+![alt text](image-1.png)
 ---
 
 ## Quick start

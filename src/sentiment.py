@@ -7,6 +7,7 @@ import nltk
 from nltk.sentiment.vader import SentimentIntensityAnalyzer  
 from textblob import TextBlob 
 from transformers import pipeline  
+import json
 
 load_dotenv()
 
@@ -155,16 +156,23 @@ def analyze_sentiment(headlines):
 
 # Testing Script
 if __name__ == "__main__":
-    
-    hs = get_headlines("TGT")
-    
-    # Print each headline with its number
-    for i, h in enumerate(hs, 1):
-        print(i, h)
-    
-    # We analyze the sentiment of the fetched headlines
+
+    ticker = "TGT"
+    # Fetch headlines for the ticker
+    hs = get_headlines(ticker)
+    # Analyze sentiment scores
     scores, avg = analyze_sentiment(hs)
-    
-    # Log the results
-    print("Headlines found:", len(hs))
-    print("Average sentiment:", avg)
+
+    # Prepare results as a dictionary
+    results = {
+        "company": ticker,
+        "headlines": [{"headline": h, "sentiment": s} for h, s in zip(hs, scores)],
+        "average_sentiment": avg
+    }
+
+    # Save results to JSON file
+    filename = "data/" + ticker + "_sentiment_data.json"
+    with open(filename, "w", encoding="utf-8") as f:
+        json.dump(results, f, ensure_ascii=False, indent=4)
+
+    print("Results written to", filename)

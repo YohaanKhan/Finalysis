@@ -3,7 +3,7 @@ from flask import Flask, render_template, request, redirect, url_for, flash
 import json
 import pandas as pd
 from xgboost import XGBRegressor
-from ingestion import run_pipeline
+from src.ingestion import run_pipeline
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent

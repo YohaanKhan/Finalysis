@@ -137,4 +137,4 @@ You will need FRED and NEWSAPI keys. Generate and load the keys in a .env file.
 
 ---
 
-Codes and contibutions by Yohaan Khan and Nideesh Kayal.
+Codes and contributions by Yohaan Khan and Nideesh Kayal.

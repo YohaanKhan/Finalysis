@@ -183,10 +183,6 @@ def add_macro_data_from_fred(
         direction="backward"
     ).drop(columns=["DATE"])
 
-    # Save
-    merged.to_csv(save_as, index=False)
-    print(f"Complete structured dataset saved as {save_as}")
-
     return merged
 
 
